@@ -8,14 +8,7 @@ services:
       image: acobster/lando-clojure:cli-tools
       command: clojure -m app
 
-      # Removing this and the dbhost block below fixes the Nginx error???
-      depends_on:
-        - dbhost
-
-  dbhost:
-    type: postgres:11
-    creds:
-      database: rtc
+  # Look Ma, no dbhost!
 
   nginx:
     type: nginx:1.14
