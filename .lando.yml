@@ -1,0 +1,34 @@
+name: clojure-app
+
+services:
+  appserver:
+    type: compose
+
+    services:
+      image: acobster/lando-clojure:cli-tools
+      command: clojure -m app
+
+      # Removing this and the dbhost block below fixes the Nginx error???
+      depends_on:
+        - dbhost
+
+  dbhost:
+    type: postgres:11
+    creds:
+      database: rtc
+
+  nginx:
+    type: nginx:1.14
+    webroot: resources/public
+    ssl: true
+
+    config:
+      server: lando/nginx.conf
+
+    overrides:
+      depends_on:
+        - appserver
+
+proxy:
+  nginx:
+    - clojure-app.lndo.site
